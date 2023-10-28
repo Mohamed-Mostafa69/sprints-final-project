@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web-app:
+    image: demo-app-back:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: your_mysql_username
+      MYSQL_PASSWORD: your_mysql_password
+      MYSQL_DATABASE: your_database_name
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: your_mysql_root_password
+      MYSQL_DATABASE: your_database_name
+    ports:
+      - "3306:3306"

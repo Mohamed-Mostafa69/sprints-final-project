@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-statefulset
+spec:
+  serviceName: mysql-service
+  replicas: 1 # Change the number of replicas as needed
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest # Use the MySQL image you prefer
+          ports:
+            - containerPort: 3306 # MySQL port
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: your-root-password
+            - name: MYSQL_DATABASE
+              value: your-database-name
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DB_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DB_PASSWORD
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: your-storage-class # Set the appropriate storage class
+        resources:
+          requests:
+            storage: 10Gi # Adjust the storage size as needed

@@ -1,0 +1,20 @@
+---
+- name: Deploy k3s Cluster
+  hosts: masters
+  become: yes
+  tasks:
+    - name: Install k3s on master
+      shell: curl -sfL https://get.k3s.io | sh -
+
+  handlers:
+    - name: Restart k3s on master
+      service:
+        name: k3s
+        state: restarted
+
+- name: Join Node to Cluster
+  hosts: nodes
+  become: yes
+  tasks:
+    - name: Install k3s on node
+      shell: curl -sfL https://get.k3s.io | K3S_URL=https://35.233.17.242:6443 K3S_TOKEN=K10379ac723e40f96595d6472387473db64b4e35b005956c71dd24262330108f5b9::server:87e66cde55908154cb4516d962b719be sh -

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  DB_USER: your-db-username
+  DB_DATABASE: your-database-name
+  DB_HOST: mysql-service # This should match the MySQL service name
